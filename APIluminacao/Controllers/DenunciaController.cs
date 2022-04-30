@@ -21,11 +21,13 @@ namespace APIluminacao.Controllers
         }
 
         [HttpPost]
-        public async Task Add([FromBody] DenunciaCadastroViewModel viewModel, CancellationToken cancellationToken)
+        public async Task<ActionResult<DenunciaCadastroViewModel>> Add([FromBody] DenunciaCadastroViewModel viewModel, CancellationToken cancellationToken)
         {
             Denuncia entity = this._mapper.Map<Denuncia>(viewModel);
 
-            await _denunciaService.AddAsync(entity, cancellationToken);
+            Denuncia denunciaAdded = await _denunciaService.AddAsync(entity, cancellationToken);
+
+            return Ok(denunciaAdded);
         }
     }
 }

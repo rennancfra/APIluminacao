@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.Common;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,8 +47,11 @@ namespace Database.Context
 
         public async Task ApplyChangesAsync(CancellationToken cancellationToken)
         {
-            // Aciona o salvamento dos dados sem o accept changes para manter os registros realizados
+            // Aciona o salvamento dos dados
             await this.SaveChangesAsync(false, cancellationToken);
+
+            // Aceita as mudanças no Tracker para atualizar os objetos das entidades em runtime
+            this.ChangeTracker.AcceptAllChanges();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -112,9 +116,14 @@ namespace Database.Context
             {
                 var migrator = this.Database.GetService<IMigrator>();
 
-                await migrator.MigrateAsync(cancellationToken: cancellationToken);
+                var pendingMigrations = await this.Database.GetPendingMigrationsAsync(cancellationToken);
+
+                if(pendingMigrations.Any())
+                {
+                    await migrator.MigrateAsync(cancellationToken: cancellationToken);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new Exception("Não foi possível aplicar as Migrations do sistema.");
             }

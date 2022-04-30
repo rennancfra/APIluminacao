@@ -64,6 +64,8 @@ namespace Database
             {
                 try
                 {
+                    await this.DefaultContext.ApplyChangesAsync(cancellationToken);
+
                     // Aplica o commit da transação
                     await transaction.CommitAsync(cancellationToken);
                 }

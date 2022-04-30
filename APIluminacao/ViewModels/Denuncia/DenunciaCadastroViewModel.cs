@@ -4,6 +4,6 @@ namespace APIluminacao.ViewModels.Denuncia
 {
     public class DenunciaCadastroViewModel : EntityViewModel
     {
-        public string Local { get; set; } = null!;
+        public string Descricao { get; set; } = null!;
     }
 }

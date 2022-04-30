@@ -1,5 +1,5 @@
 ﻿using Domain.Models;
-using Repository.Interfaces;
+using Repository;
 using Services.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,16 +8,20 @@ namespace Services.Services
 {
     public class DenunciaService : IDenunciaService
     {
-        private readonly IDenunciaRepository _repository;
+        private readonly IUnitOfWork _uow;
 
-        public DenunciaService(IDenunciaRepository repository)
+        public DenunciaService(IUnitOfWork uow)
         {
-            _repository = repository;
+            _uow = uow;
         }
 
-        public async Task AddAsync(Denuncia denuncia, CancellationToken cancellationToken)
+        public async Task<Denuncia> AddAsync(Denuncia denuncia, CancellationToken cancellationToken)
         {
-            await this._repository.AddAsync(denuncia, cancellationToken);
+            await this._uow.DenunciaRepository.AddAsync(denuncia, cancellationToken);
+
+            await _uow.ApplyChangesAsync(cancellationToken);
+
+            return denuncia;
         }
     }
 }
