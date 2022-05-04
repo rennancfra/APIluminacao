@@ -19,6 +19,7 @@ namespace Repository
 
         #region Repositórios Principais
         IDenunciaRepository DenunciaRepository { get; }
+        IUsuarioRepository UsuarioRepository { get; }
         #endregion
     }
 }

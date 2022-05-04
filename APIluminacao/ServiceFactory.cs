@@ -1,8 +1,13 @@
 ﻿using APIluminacao.AutoMapper;
+using APIluminacao.Extensions;
 using Database;
 using Database.Context;
 using Database.Interface;
 using Database.Repository;
+using Domain.AppSettings;
+using Domain.Interface;
+using Domain.Interface.Implementation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +19,7 @@ using Services.Interfaces;
 using Services.Services;
 using System;
 using System.Data.Common;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,8 +34,25 @@ namespace APIluminacao
 
         public async static Task RegisterServices(IServiceCollection services, IConfiguration Configuration)
         {
+            services
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User!)
+                .AddTransient(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User!)
+                .AddTransient<IUsuarioLogado, UsuarioLogado>();
+
             // Registra serviços da aplicação
-            services.AddScoped<IDenunciaService, DenunciaService>();
+            services
+                .AddScoped<IDenunciaService, DenunciaService>()
+                .AddScoped<IUsuarioService, UsuarioService>()
+                .AddScoped<ILoginService, LoginService>()
+                .AddScoped<IAuthorizationService, AuthorizationService>()
+                .AddScoped<IJwtService, JwtService>()
+                .AddScoped<ITokenService, TokenService>();
+
+            // Arquivo específico para secrets do sistema
+            services
+                .ConfigureWritable<TokenJwtModel>(Configuration.GetSection("token"), "appsecrets.json")
+                .ConfigureWritable<ApplicationModel>(Configuration.GetSection("application"), "appsecrets.json");
 
             RegisterAutoMapper(services);
 
@@ -46,7 +69,9 @@ namespace APIluminacao
 
             // Registra os repositórios dos bancos de dados
             services
-                .AddScoped<IDenunciaRepository, DenunciaRepositoryEF>();
+                .AddScoped<IDenunciaRepository, DenunciaRepositoryEF>()
+                .AddScoped<IUsuarioRepository, UsuarioRepositoryEF>()
+                .AddScoped<IPermissaoUsuarioRepository, PermissaoUsuarioRepositoryEF>();
 
             // Cria o provider temporário para acionar os migrations
             _provider = services.BuildServiceProvider();

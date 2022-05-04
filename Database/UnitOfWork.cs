@@ -32,6 +32,7 @@ namespace Database
 
         #region Repositórios Principais
         public IDenunciaRepository DenunciaRepository => this._serviceProvider.GetRequiredService<IDenunciaRepository>();
+        public IUsuarioRepository UsuarioRepository => this._serviceProvider.GetRequiredService<IUsuarioRepository>();
         #endregion
 
         #endregion
