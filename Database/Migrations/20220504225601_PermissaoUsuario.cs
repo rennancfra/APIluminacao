@@ -64,7 +64,7 @@ namespace Database.Migrations
             sql = new();
 
             // Insere a permissão de usuário master
-            sql.Append(@"INSERT INTO public.""PermissaoUsuario"" (""UsuarioID"", ""Permissao"") VALUES (1, 4,)");
+            sql.Append(@"INSERT INTO public.""PermissaoUsuario"" (""UsuarioID"", ""Permissao"") VALUES (1, 4)");
 
             // Executa o script montado
             migrationBuilder.Sql(sql.ToString(), true);
