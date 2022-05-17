@@ -43,7 +43,7 @@ namespace APIluminacao
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "APIluminacao v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection(); COMENTADO POR FALTA DE CERTIFICADO
 
             app.UseRouting();
 

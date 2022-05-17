@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>b8df893f-4d59-4298-9e4b-59eb56a0e2c3</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>SetupAPI</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <Name>Setup</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <Cultures>pt-BR</Cultures>
+    <SuppressIces>ICE68;ICE61;ICE60</SuppressIces>
+    <CompilerAdditionalOptions>-arch x64</CompilerAdditionalOptions>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <Cultures>pt-BR</Cultures>
+    <SuppressIces>ICE61;ICE60</SuppressIces>
+    <CompilerAdditionalOptions>-arch x64</CompilerAdditionalOptions>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Arquivo padrão de configurações -->
+    <Compile Include="APIProduct.wxs" />
+    <!-- Autogerado via "heat" -->
+    <!-- Configurações de UI -->
+    <Compile Include="APIUI_InstallDir.wxs" />
+    <Compile Include="APIFiles.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixIIsExtension">
+      <HintPath>$(WixExtDir)\WixIIsExtension.dll</HintPath>
+      <Name>WixIIsExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="APITransformHeat.xslt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\APIluminacao\APIluminacao.csproj">
+      <Name>APIluminacao</Name>
+      <Project>{AE8F6E4A-A67C-4757-9AED-453B25EF1340}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <UsingTask TaskName="GenerateProductVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <AssemblyPath ParameterType="System.String" Required="true" />
+      <ProductVersionOutput ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Xml" />
+      <Reference Include="System.Xml.Linq" />
+      <Using Namespace="System" />
+      <Using Namespace="System.Security" />
+      <Using Namespace="System.Xml.Linq" />
+      <Using Namespace="System.Reflection" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+		// Output
+		ProductVersionOutput = "9.9.9.9";
+	  ]]></Code>
+    </Task>
+  </UsingTask>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <!--<Import Project="$(WixTargetsPath)" Condition=" Exists('$(WixTargetsPath)') " />-->
+  <Target Name="EnsureWixToolsetInstalled" Condition=" !Exists('$(WixTargetsPath)') ">
+    <Error Text="The WiX Toolset v4 build tools must be installed to build this project. To download the WiX Toolset v4, see http://wixtoolset.org/releases/" />
+  </Target>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <!-- Limpa pastas de publicação caso existam -->
+    <Exec Command="RD &quot;..\PublicacaoPacote&quot; /S/Q" />
+    <!-- Executa publicação via utilitário CORE da aplicação APIluminacao -->
+    <Exec Command="dotnet publish &quot;..\APIluminacao\APIluminacao.csproj&quot; /p:PublishProfile=Debugx64Profile -o &quot;..\PublicacaoPacote&quot;" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" />
+    <Exec Command="dotnet publish &quot;..\APIluminacao\APIluminacao.csproj&quot; /p:PublishProfile=Releasex64Profile -c Release -o &quot;..\PublicacaoPacote&quot;" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" />
+    <!-- Gera a versão do Setup -->
+    <GenerateProductVersion AssemblyPath="..\PublicacaoPacote\APIluminacao.dll">
+      <Output TaskParameter="ProductVersionOutput" PropertyName="FinalProductVersion" />
+    </GenerateProductVersion>
+    <PropertyGroup>
+      <!-- Define variável constante com caminho para a pasta de publicação APIluminacao -->
+      <!-- Define variável com a versão do produto -->
+      <DefineConstants>DirPacote=..\PublicacaoPacote;ProductVersion=$(FinalProductVersion)</DefineConstants>
+    </PropertyGroup>
+    <!-- Executa "heat" para geração do arquivo QCFiles.wxs com o conteúdo da pasta de publicação (com exceção do executável) -->
+    <HeatDirectory NoLogo="$(HarvestDirectoryNoLogo)" SuppressAllWarnings="$(HarvestDirectorySuppressAllWarnings)" SuppressSpecificWarnings="$(HarvestDirectorySuppressSpecificWarnings)" ToolPath="$(WixToolPath)" TreatWarningsAsErrors="$(HarvestDirectoryTreatWarningsAsErrors)" TreatSpecificWarningsAsErrors="$(HarvestDirectoryTreatSpecificWarningsAsErrors)" VerboseOutput="$(HarvestDirectoryVerboseOutput)" AutogenerateGuids="$(HarvestDirectoryAutogenerateGuids)" GenerateGuidsNow="$(HarvestDirectoryGenerateGuidsNow)" OutputFile="APIFiles.wxs" SuppressFragments="$(HarvestDirectorySuppressFragments)" SuppressUniqueIds="$(HarvestDirectorySuppressUniqueIds)" Transforms="APITransformHeat.xslt" Directory="..\PublicacaoPacote" ComponentGroupName="APIComponentes" DirectoryRefId="INSTALLFOLDER" KeepEmptyDirectories="true" PreprocessorVariable="var.DirPacote" SuppressCom="%(HarvestDirectory.SuppressCom)" SuppressRootDirectory="true" SuppressRegistry="true" />
+  </Target>
+  <Target Name="AfterBuild">
+    <!--Limpa os diretórios de publicação utilizados durante o empacotamento da aplicação -->
+    <Exec Command="RD &quot;..\PublicacaoPacote&quot; /S/Q" />
+  </Target>
+</Project>

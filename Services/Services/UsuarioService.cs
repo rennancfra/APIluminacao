@@ -19,8 +19,8 @@ namespace Services.Services
         public bool Authenticate(Usuario usuario, string senha)
         {
             // Pega a senha criptografada atual esperada para o usuário
-            string? senhaAtual = usuario.Senha;
-            string? hashAtual = usuario.Hash;
+            string? senhaAtual = usuario?.Senha ?? "";
+            string? hashAtual = usuario?.Hash ?? "";
 
             // Processa a senha com o algorítmo de criptografia para verificar a senha
             string senhaInserida = this.EncryptPassword(senha, hashAtual!);

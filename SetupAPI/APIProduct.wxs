@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+    xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+
+  <!-- Importante definir Codepage 1252 para que seja permitido o uso de caracteres com acentos (português) -->
+  <Product Id="*"
+           Name="APIluminacao"
+           Language="1033" Codepage="1252"
+           Version="$(var.ProductVersion)"
+           Manufacturer="TCC - Grupo 6"
+           UpgradeCode="7560c245-0152-49a4-b7de-a41471fac82f">
+
+    <Package Id="*"
+             Keywords="Installer"
+             Platform="x64"
+             Description="Instalador APIluminacao"
+             InstallerVersion="200"
+             Languages="1033"
+             Compressed="yes"
+             SummaryCodepage="1252"
+             InstallScope="perMachine" />
+
+    <!-- The ARPHELPLINK property is the Internet address for technical support. Product maintenance applets display this value. -->
+    <Property Id="ARPHELPLINK" Value="http://www.matrixsaude.com.br/" />
+
+    <!-- Only overwrite the files if the version is different https://docs.microsoft.com/pt-br/windows/win32/msi/reinstallmode?redirectedfrom=MSDN-->
+    <Property Id="REINSTALLMODE" Value="dmus" />
+
+    <MajorUpgrade
+      AllowSameVersionUpgrades="yes"
+      AllowDowngrades="no"
+      DowngradeErrorMessage="Uma versão mais recente do [ProductName] já está instalada. Remova a versão instalada para poder continuar."/>
+
+    <!-- Impede que o serviço seja desistalado em caso de downgrade  -->
+    <InstallExecuteSequence>
+      <DeleteServices>NOT UPGRADINGPRODUCTCODE</DeleteServices>
+    </InstallExecuteSequence>
+
+    <Media Id="1" Cabinet="APIluminacao.cab" EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="APIluminacao" Level="1">
+      <!-- Componentes auto-gerados do arquivo QCFiles.wxs -->
+      <ComponentGroupRef Id="APIComponentes" />
+      <!-- Possui apenas o executável e suas configurações como serviço -->
+      <ComponentGroupRef Id="APIExecutavel"/>
+    </Feature>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <!-- User Interface -->
+    <UI>
+      <!-- custom dialog -->
+      <UIRef Id="APIUI_InstallDir" />
+      <!-- biblioteca de interfaces WixUI -->
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+
+  </Product>
+
+  <Fragment>
+
+    <!-- Caminho de instalação da aplicação -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="TCC6" Name="TCC6">
+          <Directory Id="INSTALLFOLDER" Name="APIluminacao" >
+            <Directory Id="INSTALLAGENT" Name="Diretorio" />
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+  </Fragment>
+
+  <Fragment>
+
+    <ComponentGroup Id="APIExecutavel" Directory="INSTALLFOLDER">
+      <Component Id="Executavel">
+        <!-- Caminho para o arquivo .exe -->
+        <File Source="$(var.DirPacote)\APIluminacao.exe" ProcessorArchitecture="x64" />
+
+        <!-- Remove appsecrets em qualquer situação, força todos os usuários a realizar login novamente após instalação -->
+        <RemoveFile Id="RemoveTokenSecretOnInstall" Name="appsecrets.json" On="both" />
+
+        <!-- Registra executável como serviço do windows -->
+        <ServiceInstall Id="ServiceInstaller"
+              Type="ownProcess"
+              Vital="yes"
+              Name="APIluminacao"
+              DisplayName="APIluminação"
+              Description="Serviço responsável pela ativação da APIluminação"
+              Start="auto"
+              Account="LocalSystem"
+              ErrorControl="critical"
+              Interactive="no">
+        </ServiceInstall>
+
+        <ServiceControl Id="StartService" Stop="both" Remove="uninstall" Name="APIluminacao" Wait="yes"/>
+      </Component>
+    </ComponentGroup>
+
+  </Fragment>
+</Wix>

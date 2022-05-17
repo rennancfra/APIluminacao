@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace APIluminacao.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]/[action]")]
     public class DenunciaController : ControllerBase
     {
         private readonly IDenunciaService _denunciaService;

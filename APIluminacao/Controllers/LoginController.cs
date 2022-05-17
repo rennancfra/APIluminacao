@@ -12,7 +12,7 @@ namespace APIluminacao.Controllers
 {
     [ApiController]
     [AllowAnonymous]
-    [Route("[controller]")]
+    [Route("api/[controller]/[action]")]
     public class LoginController : ControllerBase
     {
         private readonly Services.Interfaces.IAuthorizationService _authorizationService;
