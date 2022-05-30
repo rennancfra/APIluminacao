@@ -36,8 +36,6 @@ namespace APIluminacao
                       {
                           // Configura a porta 5000 como Http
                           option.ListenLocalhost(5000);
-                          // Configura a porta 5001 como Https
-                          // option.ListenLocalhost(5001, opt => UseHttps(opt, "", "")); COMENTADO POR FALTA DE CERTIFICADO
                       });
                 });
         }
@@ -48,29 +46,18 @@ namespace APIluminacao
         /// </summary>
         public static string GetDiretorioExecucao()
         {
+            bool isDebug = false;
+
 #if DEBUG
-            var pathToExe = Process.GetCurrentProcess().MainModule?.FileName;
-            return Path.GetDirectoryName(pathToExe) ?? string.Empty;
+            isDebug = true;
 #endif
+            if (isDebug)
+            {
+                var pathToExe = Process.GetCurrentProcess().MainModule?.FileName;
+                return Path.GetDirectoryName(pathToExe) ?? string.Empty;
+            }
 
             return Directory.GetCurrentDirectory();
-        }
-
-        private static void UseHttps(ListenOptions options, string? certificatePath, string? certificatePassword)
-        {
-            if (string.IsNullOrEmpty(certificatePath))
-            {
-                options.UseHttps();
-                return;
-            }
-
-            if (string.IsNullOrEmpty(certificatePassword))
-            {
-                options.UseHttps(certificatePath);
-                return;
-            }
-
-            options.UseHttps(certificatePath, certificatePassword);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using APIluminacao.ViewModels.Denuncia;
+﻿using APIluminacao.Attributes;
+using APIluminacao.ViewModels.Denuncia;
 using AutoMapper;
+using Domain.Enums;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -21,6 +23,7 @@ namespace APIluminacao.Controllers
         }
 
         [HttpPost]
+        [HasRolePermission(PermissaoSistemaEnum.DenunciaCria, PermissaoSistemaEnum.UsuarioMaster)]
         public async Task<ActionResult<DenunciaCadastroViewModel>> Add([FromBody] DenunciaCadastroViewModel viewModel, CancellationToken cancellationToken)
         {
             Denuncia entity = this._mapper.Map<Denuncia>(viewModel);

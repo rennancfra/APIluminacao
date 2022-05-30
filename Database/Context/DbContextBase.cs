@@ -125,7 +125,9 @@ namespace Database.Context
             }
             catch (Exception ex)
             {
-                throw new Exception("Não foi possível aplicar as Migrations do sistema.");
+                string error = string.Format("Não foi possível aplicar as Migrations do sistema. \n Detalhes: {0}", ex.Message);
+                Console.Write(error);
+                throw new Exception(error);
             }
         }
     }

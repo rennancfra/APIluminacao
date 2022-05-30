@@ -22,6 +22,7 @@ using System.Data.Common;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
+using ViaCep;
 
 namespace APIluminacao
 {
@@ -34,6 +35,9 @@ namespace APIluminacao
 
         public async static Task RegisterServices(IServiceCollection services, IConfiguration Configuration)
         {
+            //Adicina ViaCep
+            services.AddHttpClient<IViaCepClient, ViaCepClient>(client => { client.BaseAddress = new Uri("https://viacep.com.br/"); });
+
             services
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User!)

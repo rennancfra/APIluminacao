@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using APIluminacao.ViewModels.Usuario;
+using AutoMapper;
+using Domain.Models;
 
 namespace Matrix.QC.Web.AutoMapper
 {
@@ -6,8 +8,8 @@ namespace Matrix.QC.Web.AutoMapper
     {
         public DomainToViewModelMappingProfile()
         {
-            #region Commons: Domain -> ViewModel
-            // CreateMap<ClasseDominio, ClasseViewModel>();
+            #region Usuario: Domain -> ViewModel
+            CreateMap<Usuario, UsuarioCadastroViewModel>();
             #endregion
         }
     }

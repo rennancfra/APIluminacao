@@ -15,6 +15,11 @@ namespace Database.Repository
         {
         }
 
+        public async Task<bool> ExistsUsuarioByCodigo(string codigo, CancellationToken cancellationToken)
+        {
+            return await this.DbSet.AnyAsync(i => i.Codigo == codigo, cancellationToken);
+        }
+
         public async Task<Usuario> GetUsuarioByCodigoAsync(string codigo, CancellationToken cancellationToken)
         {
             return await this.DbSet

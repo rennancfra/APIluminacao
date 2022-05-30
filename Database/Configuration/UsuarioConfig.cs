@@ -9,27 +9,29 @@ namespace Database.Configuration
     {
         public override void ConfigureEntity(EntityTypeBuilder<Usuario> builder)
         {
-            builder.Property(c => c.Codigo)
+            builder.Property(u => u.Codigo)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(c => c.Nome)
+            builder.Property(u => u.Nome)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(c => c.Senha)
+            builder.Property(u => u.Senha)
                 .HasMaxLength(500);
 
-            builder.Property(c => c.Hash)
+            builder.Property(u => u.Hash)
                 .HasMaxLength(255);
 
-            builder.Property(c => c.Email)
+            builder.Property(u => u.Email)
                 .HasMaxLength(60);
 
-            builder.Property(c => c.Celular)
+            builder.Property(u => u.Celular)
                 .HasMaxLength(13);
 
-            builder.HasMany(c => c.Permissoes)
+            builder.Property(u => u.Ativo);
+
+            builder.HasMany(u => u.Permissoes)
                 .WithOne()
                 .HasForeignKey(p => p.UsuarioID)
                 .OnDelete(DeleteBehavior.Cascade);
