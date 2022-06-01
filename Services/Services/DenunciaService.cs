@@ -23,5 +23,10 @@ namespace Services.Services
 
             return denuncia;
         }
+
+        public async Task<Denuncia> GetDenunciaAsync(long codigo, CancellationToken cancellationToken)
+        {
+            return await this._uow.DenunciaRepository.GetDenunciaId(codigo, cancellationToken);
+        }
     }
 }

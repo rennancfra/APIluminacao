@@ -13,6 +13,17 @@ namespace Database.Configuration
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(m => m.UsuarioId)
+                .IsRequired();
+
+            builder.Property(m => m.Cep)
+                .IsRequired()
+                .HasMaxLength(8);
+
+            builder.Property(m => m.Numero)
+                .IsRequired()
+                .HasMaxLength(10);
+
             builder.ToTable("Denuncia");
         }
     }

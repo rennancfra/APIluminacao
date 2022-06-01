@@ -32,5 +32,14 @@ namespace APIluminacao.Controllers
 
             return Ok(denunciaAdded);
         }
+
+        [HttpGet]
+        [HasRolePermission(PermissaoSistemaEnum.UsuarioMaster)]
+        public async Task<ActionResult<Denuncia>> GetId([FromQuery]long codigo, CancellationToken cancellationToken)
+        {
+            Denuncia viewModel = await this._denunciaService.GetDenunciaAsync(codigo, cancellationToken);
+
+            return Ok(viewModel);
+        }
     }
 }

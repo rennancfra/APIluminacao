@@ -10,5 +10,6 @@ namespace Services.Interfaces
         /// Adiona uma denúncia no banco de dados
         /// </summary>
         public Task<Denuncia> AddAsync(Denuncia denuncia, CancellationToken cancellationToken);
+        public Task<Denuncia> GetDenunciaAsync(long codigo, CancellationToken cancellationToken);
     }
 }
