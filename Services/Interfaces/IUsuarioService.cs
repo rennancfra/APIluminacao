@@ -23,11 +23,6 @@ namespace Services.Interfaces
         bool Authenticate(Usuario usuario, string senha);
 
         /// <summary>
-        /// Ativa um usuário no sistema
-        /// </summary>
-        Task ActivateUsuarioAsync(long usuarioID, CancellationToken cancellationToken);
-
-        /// <summary>
         /// Realiza o Encrypt da senha do usuário com base no Hash informado
         /// </summary>
         string EncryptPassword(string password, string hash);

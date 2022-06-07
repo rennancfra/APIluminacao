@@ -51,40 +51,6 @@ namespace Services.Services
             }
         }
 
-        public async Task ActivateUsuarioAsync(long usuarioID, CancellationToken cancellationToken)
-        {
-            // Se o ID informado for inválido, dispara erro
-            if (usuarioID == 0)
-            {
-                throw new Exception("O ID informado está inválido no sistema. Verifique os dados e tente novamente.");
-            }
-
-            try
-            {
-                // Busca o usuário na base de dados
-                Usuario? usuario = await this._uow.UsuarioRepository.GetByIdAsync(usuarioID, cancellationToken);
-
-                // Se o usuário não existir, dispara erro
-                if (usuario == null)
-                {
-                    throw new Exception(string.Format("O Usuário de ID: {0} não existe no sistema.", usuarioID));
-                }
-
-                // Muda flag do usuário, que passa a estar Ativo
-                usuario.Ativo = true;
-
-                // Altera a entidade na base de dados
-                this._uow.UsuarioRepository.Update(usuario);
-
-                // Confirma as alterações na base de dados
-                await this._uow.ApplyChangesAsync(cancellationToken);
-            }
-            catch (Exception exc)
-            {
-                throw new Exception(string.Format("Ocorreu um erro durante o cadastro de Usuário. Verifique os dados informados e tente novamente. \n Detalhes: {0}"), exc);
-            }
-        }
-
         public async Task<IEnumerable<Usuario>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await this._uow.UsuarioRepository.GetAllAsync(cancellationToken);
@@ -119,12 +85,6 @@ namespace Services.Services
 
         public bool Authenticate(Usuario usuario, string senha)
         {
-            // Se o usuário não estiver ativo, não deixa autenticar e dispara Exception
-            if (!usuario.Ativo)
-            {
-                throw new Exception(string.Format("O Usuário: {0} está inativo no sistema. Contate o administrador e tente novamente", usuario.Nome));
-            }
-
             // Pega a senha criptografada atual esperada para o usuário
             string? senhaAtual = usuario?.Senha ?? "";
             string? hashAtual = usuario?.Hash ?? "";

@@ -37,9 +37,9 @@ namespace APIluminacao.Controllers
         [HasRolePermission(PermissaoSistemaEnum.UsuarioMaster)]
         public async Task<ActionResult<Denuncia>> GetId([FromQuery]long codigo, CancellationToken cancellationToken)
         {
-            Denuncia viewModel = await this._denunciaService.GetDenunciaAsync(codigo, cancellationToken);
+            Denuncia denuncia = await this._denunciaService.GetDenunciaAsync(codigo, cancellationToken);
 
-            return Ok(viewModel);
+            return Ok(this._mapper.Map<DenunciaCadastroViewModel>(denuncia));
         }
     }
 }

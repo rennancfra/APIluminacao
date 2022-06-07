@@ -29,8 +29,6 @@ namespace Database.Configuration
             builder.Property(u => u.Celular)
                 .HasMaxLength(13);
 
-            builder.Property(u => u.Ativo);
-
             builder.HasMany(u => u.Permissoes)
                 .WithOne()
                 .HasForeignKey(p => p.UsuarioID)

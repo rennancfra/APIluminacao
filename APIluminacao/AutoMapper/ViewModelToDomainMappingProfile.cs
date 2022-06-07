@@ -1,5 +1,6 @@
 ﻿using APIluminacao.ViewModels.Denuncia;
 using APIluminacao.ViewModels.Login;
+using APIluminacao.ViewModels.Municipio;
 using APIluminacao.ViewModels.Usuario;
 using AutoMapper;
 using Domain.Models;
@@ -21,6 +22,11 @@ namespace Matrix.QC.Web.AutoMapper
 
             #region Usuario: ViewModel -> Command
             CreateMap<UsuarioCadastroViewModel, Usuario>();
+            #endregion
+
+            #region Municipio: ViewModel -> Command
+            CreateMap<MunicipioCadastroViewModel, MunicipioPrincipal>();
+            CreateMap<MunicipioUpdateViewModel, MunicipioUpdate>();
             #endregion
         }
     }

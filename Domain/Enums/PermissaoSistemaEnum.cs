@@ -13,7 +13,10 @@
         UsuarioMaster = 3,
 
         // Usuario
-        UsuarioAtiva = 4,
-        UsuarioCria = 5,
+        UsuarioCria = 4,
+
+        // Municipio
+        MunicipioCria = 5,
+        MinicipioEdita = 6,
     }
 }

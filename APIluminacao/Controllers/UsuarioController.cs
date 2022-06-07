@@ -38,15 +38,6 @@ namespace APIluminacao.Controllers
             return Ok(usuarioAdded);
         }
 
-        [HttpPost]
-        [HasRolePermission(PermissaoSistemaEnum.UsuarioMaster, PermissaoSistemaEnum.UsuarioAtiva)]
-        public async Task<ActionResult<UsuarioCadastroViewModel>> Activate([FromBody] UsuarioAtivaViewModel usuario, CancellationToken cancellationToken)
-        {
-            await _usuarioService.ActivateUsuarioAsync(usuario.UsuarioID, cancellationToken);
-
-            return Ok();
-        }
-
         [HttpGet]
         [HasRolePermission(PermissaoSistemaEnum.UsuarioMaster)]
         public async Task<ActionResult<IEnumerable<UsuarioCadastroViewModel>>> GetAll(CancellationToken cancellationToken)

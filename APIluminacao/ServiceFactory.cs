@@ -51,7 +51,8 @@ namespace APIluminacao
                 .AddScoped<ILoginService, LoginService>()
                 .AddScoped<IAuthorizationService, AuthorizationService>()
                 .AddScoped<IJwtService, JwtService>()
-                .AddScoped<ITokenService, TokenService>();
+                .AddScoped<ITokenService, TokenService>()
+                .AddScoped<IMunicipioPrincipalService, MunicipioPrincipalService>();
 
             // Arquivo específico para secrets do sistema
             services
@@ -75,7 +76,8 @@ namespace APIluminacao
             services
                 .AddScoped<IDenunciaRepository, DenunciaRepositoryEF>()
                 .AddScoped<IUsuarioRepository, UsuarioRepositoryEF>()
-                .AddScoped<IPermissaoUsuarioRepository, PermissaoUsuarioRepositoryEF>();
+                .AddScoped<IPermissaoUsuarioRepository, PermissaoUsuarioRepositoryEF>()
+                .AddScoped<IMunicipioPrincipalRepository, MunicipioPrincipalRepositoryEF>();
 
             // Cria o provider temporário para acionar os migrations
             _provider = services.BuildServiceProvider();
