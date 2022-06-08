@@ -12,5 +12,6 @@ namespace Domain.Models
         public string? Email { get; set; }
         public string? Celular { get; set; }
         public List<PermissaoUsuario>? Permissoes { get; set; }
+        public List<Denuncia>? Denuncias { get; set; }
     }
 }

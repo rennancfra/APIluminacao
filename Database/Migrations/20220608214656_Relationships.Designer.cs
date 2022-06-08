@@ -3,15 +3,17 @@ using System;
 using Database.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Database.Migrations
 {
     [DbContext(typeof(DbContextBase))]
-    partial class DbContextBaseModelSnapshot : ModelSnapshot
+    [Migration("20220608214656_Relationships")]
+    partial class Relationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +41,6 @@ namespace Database.Migrations
                     b.Property<int>("Numero")
                         .HasMaxLength(10)
                         .HasColumnType("integer");
-
-                    b.Property<string>("Rua")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<long>("UsuarioID")
                         .HasColumnType("bigint");

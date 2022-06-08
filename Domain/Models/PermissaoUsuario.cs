@@ -7,5 +7,6 @@ namespace Domain.Models
     {
         public long UsuarioID { get; set; }
         public PermissaoSistemaEnum Permissao { get; set; }
+        public Usuario? Usuario { get; set; } = null!;
     }
 }

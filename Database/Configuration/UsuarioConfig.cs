@@ -30,7 +30,12 @@ namespace Database.Configuration
                 .HasMaxLength(13);
 
             builder.HasMany(u => u.Permissoes)
-                .WithOne()
+                .WithOne(p => p.Usuario!)
+                .HasForeignKey(p => p.UsuarioID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.Denuncias)
+                .WithOne(d => d.Usuario!)
                 .HasForeignKey(p => p.UsuarioID)
                 .OnDelete(DeleteBehavior.Cascade);
 

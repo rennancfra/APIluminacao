@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface que representa o acesso ao usuário logado no sistema
     /// </summary>
-    public interface IUsuarioLogado
+    public interface ICurrentUser
     {
         /// <summary>
         /// ID do usuário logado

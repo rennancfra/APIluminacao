@@ -42,7 +42,7 @@ namespace APIluminacao
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User!)
                 .AddTransient(provider => provider.GetService<IHttpContextAccessor>()?.HttpContext?.User!)
-                .AddTransient<IUsuarioLogado, UsuarioLogado>();
+                .AddTransient<ICurrentUser, CurrentUser>();
 
             // Registra serviços da aplicação
             services

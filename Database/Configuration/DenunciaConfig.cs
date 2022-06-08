@@ -13,16 +13,21 @@ namespace Database.Configuration
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(m => m.UsuarioId)
+            builder.Property(m => m.UsuarioID)
                 .IsRequired();
 
-            builder.Property(m => m.Cep)
+            builder.Property(m => m.CEP)
                 .IsRequired()
                 .HasMaxLength(8);
 
             builder.Property(m => m.Numero)
                 .IsRequired()
                 .HasMaxLength(10);
+
+            builder.HasOne(d => d.Usuario)
+                .WithMany(u => u!.Denuncias)
+                .HasForeignKey(p => p.UsuarioID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.ToTable("Denuncia");
         }

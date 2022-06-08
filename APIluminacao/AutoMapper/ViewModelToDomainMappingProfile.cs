@@ -20,6 +20,10 @@ namespace Matrix.QC.Web.AutoMapper
             CreateMap<LoginViewModel, Login>();
             #endregion
 
+            #region Denuncia: ViewModel -> Command
+            CreateMap<DenunciaCadastroViewModel, Denuncia>();
+            #endregion
+
             #region Usuario: ViewModel -> Command
             CreateMap<UsuarioCadastroViewModel, Usuario>();
             #endregion

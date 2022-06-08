@@ -12,14 +12,14 @@ namespace Domain.Interface.Implementation
     /// <summary>
     /// Classe que representa o acesso ao usuário logado no sistema
     /// </summary>
-    public class UsuarioLogado : IUsuarioLogado
+    public class CurrentUser : ICurrentUser
     {
         /// <summary>
         /// Principal e Identity do usuário logado no sistema
         /// </summary>
         private readonly ClaimsPrincipal _claimsPrincipal;
 
-        public UsuarioLogado(ClaimsPrincipal claimsPrincipal)
+        public CurrentUser(ClaimsPrincipal claimsPrincipal)
         {
             this._claimsPrincipal = claimsPrincipal;
         }
