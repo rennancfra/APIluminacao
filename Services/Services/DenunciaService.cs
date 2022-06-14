@@ -56,6 +56,16 @@ namespace Services.Services
             return await this._uow.DenunciaRepository.GetDenunciaId(codigo, cancellationToken);
         }
 
+        public async Task<Denuncia> UpdateStatusDenuncia(long codigo, bool finalizado, CancellationToken cancellationToken)
+        {
+            var pegarDenuncia = await GetDenunciaAsync(codigo, cancellationToken);
+            pegarDenuncia.Finalizado = finalizado;
+            this._uow.DenunciaRepository.Update(pegarDenuncia);
+            await _uow.ApplyChangesAsync(cancellationToken);
+
+            return pegarDenuncia;
+        }
+
         #region Auxiliares
         private async Task ValidateDenunciaAsync(Denuncia denuncia, CancellationToken cancellationToken)
         {
@@ -93,7 +103,8 @@ namespace Services.Services
 
         public bool ValidaCEP(string cep)
         {
-            Regex Rgx = new(@"^\d{5}-\d{3}$");
+            //Regex Rgx = new(@"^\d{5}-\d{3}$");
+            Regex Rgx = new(@"^\d{8}$");
 
             if (!Rgx.IsMatch(cep))
             {

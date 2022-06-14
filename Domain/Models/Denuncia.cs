@@ -11,5 +11,6 @@ namespace Domain.Models
         public string Rua { get; set; } = null!;
         public int Numero { get; set; } = 0!;
         public Usuario? Usuario { get; set; } = null!;
+        public bool? Finalizado { get; set; } = null!;
     }
 }

@@ -29,6 +29,9 @@ namespace Database.Configuration
                 .HasForeignKey(p => p.UsuarioID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Property(m => m.Finalizado)
+                .IsRequired(false);
+
             builder.ToTable("Denuncia");
         }
     }

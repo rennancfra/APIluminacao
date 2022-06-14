@@ -27,7 +27,7 @@ namespace APIluminacao.Controllers
         public async Task<ActionResult<DenunciaCadastroViewModel>> Add([FromBody] DenunciaCadastroViewModel viewModel, CancellationToken cancellationToken)
         {
             Denuncia entity = this._mapper.Map<Denuncia>(viewModel);
-
+            entity.Finalizado = false;
             Denuncia denunciaAdded = await _denunciaService.AddAsync(entity, cancellationToken);
 
             return Ok(denunciaAdded);
@@ -40,6 +40,15 @@ namespace APIluminacao.Controllers
             Denuncia denuncia = await this._denunciaService.GetDenunciaAsync(codigo, cancellationToken);
 
             return Ok(this._mapper.Map<DenunciaCadastroViewModel>(denuncia));
+        }
+
+        [HttpPut]
+        [HasRolePermission(PermissaoSistemaEnum.DenunciaEdita, PermissaoSistemaEnum.UsuarioMaster)]
+        public async Task<ActionResult<Denuncia>> UpdateFinalizado(long codigo, bool finalizado, CancellationToken cancellationToken)
+        {
+            var denuncia = await this._denunciaService.UpdateStatusDenuncia(codigo, finalizado, cancellationToken);
+
+            return Ok(denuncia);
         }
     }
 }

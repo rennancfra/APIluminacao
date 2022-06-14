@@ -11,5 +11,6 @@ namespace Services.Interfaces
         /// </summary>
         public Task<Denuncia> AddAsync(Denuncia denuncia, CancellationToken cancellationToken);
         public Task<Denuncia> GetDenunciaAsync(long codigo, CancellationToken cancellationToken);
+        public Task<Denuncia> UpdateStatusDenuncia(long codigo, bool finalizado, CancellationToken cancellationToken);
     }
 }
